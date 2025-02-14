@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Online Rus Ruleti</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Modal yapısı - en üstte olmalı -->
+    <div id="introModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="modal-header">
+                <img src="{{ url_for('static', filename='somnia.jpg') }}" alt="Somnia Blockchain" class="somnia-logo">
+                <h2>🌟 Spinduel triggerBOM Hoşgeldiniz🌟</h2>
+            </div>
+            <div class="modal-body">
+                <div class="intro-section">
+                    <h3>🌟 *Spinduel triggerBOM Vizyonu Nedir?                    </h3>
+                    <p>Aslında çok basit sadece eğlenmeniz ve rahatlamanızdır.</p>
+                    <p>Kovboy temalı Rus Ruleti oyunumuz, oyunculara hem strateji hem de şansa dayalı heyecan verici bir deneyim sunuyor.</p>
+                </div>
+
+                <div class="jokers-section">
+                    <h3>🎲 Joker Sistemi</h3>
+                    <div class="joker-cards">
+                        <div class="joker-card">
+                            <div class="joker-icon">🛡️</div>
+                            <h4>Koruma Jokeri</h4>
+                            <p>Bir sonraki kurşundan sizi korur. Hayatta kalma şansınızı artırın!</p>
+                        </div>
+                        <div class="joker-card">
+                            <div class="joker-icon">⏭️</div>
+                            <h4>Pas Geç Jokeri</h4>
+                            <p>Tehlikeli bir durumda sıranızı rakibinize devredin.</p>
+                        </div>
+                        <div class="joker-card">
+                            <div class="joker-icon">🎯</div>
+                            <h4>Çift Kurşun Jokeri</h4>
+                            <p>Rakibinizi iki kez ateş etmeye zorlayın!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="blockchain-section">
+                    <h3>⛓️ 
+                        *Spinduel triggerBOM Nasıl Oynanır?</h3>
+                    <p>Tıpkı eski zamanların kovboyları gibi, burada da her şey cesaret ve adil kurallara dayanıyor. Öncelikle bir NFT almanız gerekir. Yahşi batıya giriş yapmak için bir kovboya ihtiyacınız vardır. Daha sonra kendinize uygun bir  bütçe belirleyip oyuna giriyorsunuz. Oyunda rus ruleti oynayacaksınız. Jokerlerinizi düzgün kullanmaya özen 
+                        gösterin yoksa BOMMM!</p>
+                </div>
+
+                <div class="warning">
+                    <p>⚠️ Oyun seslerini duymak için sayfada herhangi bir yere tıklayın</p>
+                </div>
+            </div>
+            <button class="start-game-btn">
+                <span class="btn-icon">🎮</span>
+                Maceraya Başla!
+            </button>
+        </div>
+    </div>
+    <div class="container">
+        <div id="waiting" class="screen">
+            <div class="title-box">
+                <h1>Online Rus Ruleti</h1>
+                <div class="saloon-doors">
+                    <div class="door left"></div>
+                    <div class="door right"></div>
+                </div>
+                <div class="player-count">Online Kovboylar: <span id="playerCount">0</span>/2</div>
+            </div>
+            <div class="login-box">
+                <input type="text" id="playerName" placeholder="Kovboy adınız">
+                <button class="join-btn" onclick="joinGame()">Düelloya Katıl</button>
+            </div>
+        </div>
+        
+        <div id="gameRoom" class="screen" style="display: none;">
+            <div class="game-header">
+                <h2>Düello Arenası</h2>
+                <div class="players-box">
+                    <div class="player-container left">
+                        <div class="cowboy cowboy-left">
+                            <div class="cowboy-body"></div>
+                            <div class="gun gun-left">
+                                <div class="muzzle-flash left"></div>
+                            </div>
+                        </div>
+                        <div id="player1" class="player"></div>
+                    </div>
+                    <div class="vs">VS</div>
+                    <div class="player-container right">
+                        <div class="cowboy cowboy-right">
+                            <div class="cowboy-body"></div>
+                            <div class="gun gun-right">
+                                <div class="muzzle-flash right"></div>
+                            </div>
+                        </div>
+                        <div id="player2" class="player"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="gameStatus" class="game-status"></div>
+            
+            <div class="game-area">
+                <div class="revolver-container">
+                    <div class="cylinder" id="cylinder">
+                        <div class="chamber"></div>
+                        <div class="chamber"></div>
+                        <div class="chamber"></div>
+                        <div class="chamber"></div>
+                        <div class="chamber"></div>
+                        <div class="chamber"></div>
+                    </div>
+                    <img src="{{ url_for('static', filename='revolver.png') }}" alt="Revolver" class="revolver-img">
+                    <button id="available-joker" class="available-joker" onclick="useJoker()" style="display: none;"></button>
+                </div>
+                
+                <div class="controls">
+                    <button id="triggerBtn" onclick="pullTrigger()" disabled class="trigger-btn">
+                        <span class="trigger-icon">🎯</span>
+                        Tetik Çek
+                    </button>
+                </div>
+            </div>
+            
+            <div class="game-info">
+                <div id="currentTurn" class="turn-info"></div>
+                <div id="shotCount" class="shot-count">Atış: 0/6</div>
+            </div>
+
+            <!-- Çark ve butonlar için HTML yapısı -->
+            <div id="wheel-container" class="wheel-container">
+                <div id="pointer" class="pointer"></div>
+                <div id="wheel" class="wheel">
+                    <div class="wheel-section" data-joker="skip">Pas Geç</div>
+                    <div class="wheel-section" data-joker="shield">Koruma</div>
+                    <div class="wheel-section" data-joker="double">Çift Kurşun</div>
+                    <div class="wheel-section" data-joker="none">Boş</div>
+                </div>
+                <button id="spin-wheel" class="spin-button">Çarkı Çevir</button>
+            </div>
+
+            
+        </div>
+    </div>
+    <div class="sound-warning" id="soundWarning">
+        Oyun seslerini duymak için sayfada herhangi bir yere tıklayın
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="{{ url_for('static', filename='game.js') }}"></script>
+</body>
+</html>
+ 
