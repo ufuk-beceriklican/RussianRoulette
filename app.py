@@ -25,7 +25,7 @@ socketio = SocketIO(
     cors_allowed_origins="*",
     ping_timeout=60,
     ping_interval=25,
-    async_mode=None,  # async_mode'u None olarak değiştirdik
+    async_mode="threading",  # async_mode'u None olarak değiştirdik
     logger=True,  # Hata ayıklama için logger ekledik
     engineio_logger=True  # Engine.IO logger'ı da ekledik
 )
