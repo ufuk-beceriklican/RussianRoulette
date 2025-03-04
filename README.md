@@ -44,6 +44,8 @@ Overview
 
 This is a simple Russian Roulette game developed using JavaScript, Python, HTML, and CSS. The game features a spinning wheel and a joker system to add an extra layer of excitement.
 
+https://spindueltriggerbom-production.up.railway.app/ ->  You can visit the game's website using this link.
+
 Features
 
 Interactive spinning wheel mechanism
